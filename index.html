@@ -35,23 +35,54 @@
     -->
 </head>
 <body>
-    <div class="container">
-        <!-- Problem Framing Section -->
-        <section class="hero" data-section="problem-framing">
-            <h1>Most motorcycle crashes happen on roads riders have never ridden before</h1>
-            <p class="subheadline">Evening commutes. Unfamiliar routes. Wet pavement. Each decision compounds risk.</p>
-            <p class="credibility">RideSafe analyzes crash data, road conditions, and traffic patterns across 47,000 miles of US highways.</p>
-        </section>
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo-link">
+                <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#fff;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ff3366;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <polygon points="50,10 20,50 50,90 80,50" fill="none" stroke="url(#logoGrad)" stroke-width="3"/>
+                    <circle cx="50" cy="50" r="5" fill="url(#logoGrad)"/>
+                </svg>
+                <span class="logo-text">RideSafe</span>
+            </a>
+        </div>
+    </nav>
 
-        <!-- Value Proposition Section -->
-        <section class="value-prop" data-section="value-proposition">
-            <h2>Decide which route to take based on measured risk</h2>
-            <p>RideSafe calculates a safety score for any motorcycle route using historical crash data, current weather conditions, time of day, and road geometry. Choose the safer path or prepare for the risks ahead.</p>
-        </section>
+    <section class="hero" id="home" data-section="problem-framing">
+        <div class="hero-bg"></div>
+        <div class="hero-container">
+            <div class="hero-left">
+                <div class="hero-badge">Data-Driven Risk Assessment</div>
+                <h1 class="hero-title">
+                    <span class="line"><span>Most motorcycle</span></span>
+                    <span class="line"><span>crashes happen on</span></span>
+                    <span class="line"><span>unfamiliar <span class="accent">roads</span></span></span>
+                </h1>
+                <p class="hero-description">
+                    Evening commutes. Unfamiliar routes. Wet pavement. Each decision compounds risk. RideSafe analyzes crash data, road conditions, and traffic patterns across 47,000 miles of US highways.
+                </p>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span></span>
+        </div>
+    </section>
 
-        <!-- Core Interaction (Mocked) -->
-        <section class="demo" data-section="core-interaction">
-            <h3>How it works</h3>
+    <section class="value-prop" data-section="value-proposition">
+        <div class="section-container">
+            <h2 class="section-title">Decide which route to take based on measured risk</h2>
+            <p class="section-description">RideSafe calculates a safety score for any motorcycle route using historical crash data, current weather conditions, time of day, and road geometry. Choose the safer path or prepare for the risks ahead.</p>
+        </div>
+    </section>
+
+    <section class="demo" data-section="core-interaction">
+        <div class="demo-container">
+            <h3 class="demo-title">How it works</h3>
             <div class="demo-interface">
                 <div class="demo-input-group">
                     <label for="demo-start">Starting point</label>
@@ -80,29 +111,33 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Commitment CTA -->
-        <section class="signup" data-section="signup">
-            <h2>Get early access when RideSafe launches in your area</h2>
+    <section class="signup" id="signup" data-section="signup">
+        <div class="signup-container">
+            <h2 class="section-title">Get early access when RideSafe launches in your area</h2>
             <form id="signup-form" class="signup-form">
-                <div class="form-group">
-                    <label for="email">Email address</label>
-                    <input type="email" id="email" name="email" required placeholder="your@email.com">
-                </div>
-                <div class="form-group">
-                    <label for="city">City or region</label>
-                    <input type="text" id="city" name="city" required placeholder="Austin, TX">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input type="email" id="email" name="email" required placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="city">City or region</label>
+                        <input type="text" id="city" name="city" required placeholder="Austin, TX">
+                    </div>
                 </div>
                 <button type="submit" class="cta-button" data-interaction="signup-submit">Notify me at launch</button>
                 <p class="privacy-note">We will only use your email to notify you about RideSafe. No spam. Unsubscribe anytime.</p>
             </form>
-        </section>
+        </div>
+    </section>
 
-        <!-- Post-Signup Survey (Hidden by default) -->
-        <section class="survey" id="post-signup-survey" style="display: none;" data-section="post-signup-survey">
-            <h2>Thank you for signing up</h2>
-            <p>Help us build something useful. This takes 30 seconds.</p>
+    <section class="survey" id="post-signup-survey" style="display: none;" data-section="post-signup-survey">
+        <div class="survey-container">
+            <h2 class="section-title">Thank you for signing up</h2>
+            <p class="survey-subtitle">Help us build something useful. This takes 30 seconds.</p>
             <form id="survey-form" class="survey-form">
                 <div class="form-group">
                     <label for="signup-reason">What made you sign up?</label>
@@ -118,14 +153,21 @@
                 </div>
                 <button type="submit" class="survey-button" data-interaction="survey-submit">Submit feedback</button>
             </form>
-        </section>
+        </div>
+    </section>
 
-        <!-- Survey Completion Message (Hidden by default) -->
-        <section class="completion" id="completion-message" style="display: none;" data-section="completion">
-            <h2>Feedback received</h2>
-            <p>We will keep you updated on progress.</p>
-        </section>
-    </div>
+    <section class="completion" id="completion-message" style="display: none;" data-section="completion">
+        <div class="completion-container">
+            <h2 class="section-title">Feedback received</h2>
+            <p class="completion-text">We will keep you updated on progress.</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 RideSafe. Validation in progress.</p>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>
