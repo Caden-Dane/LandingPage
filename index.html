@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RideSafe - Motorcycle Route Safety Analytics</title>
+    <meta name="description" content="Data-driven motorcycle route safety analysis. Know the risks before you ride.">
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Google Analytics 4 -->
+    <!-- Replace G-XXXXXXXXXX with your GA4 Measurement ID -->
+    <!--
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    -->
+    
+    <!-- Hotjar Tracking Code -->
+    <!-- Replace XXXXXXX with your Hotjar Site ID -->
+    <!--
+    <script>
+        (function(h,o,t,j,a,r){
+            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+            h._hjSettings={hjid:XXXXXXX,hjsv:6};
+            a=o.getElementsByTagName('head')[0];
+            r=o.createElement('script');r.async=1;
+            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+            a.appendChild(r);
+        })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+    </script>
+    -->
+</head>
+<body>
+    <div class="container">
+        <!-- Problem Framing Section -->
+        <section class="hero" data-section="problem-framing">
+            <h1>Most motorcycle crashes happen on roads riders have never ridden before</h1>
+            <p class="subheadline">Evening commutes. Unfamiliar routes. Wet pavement. Each decision compounds risk.</p>
+            <p class="credibility">RideSafe analyzes crash data, road conditions, and traffic patterns across 47,000 miles of US highways.</p>
+        </section>
+
+        <!-- Value Proposition Section -->
+        <section class="value-prop" data-section="value-proposition">
+            <h2>Decide which route to take based on measured risk</h2>
+            <p>RideSafe calculates a safety score for any motorcycle route using historical crash data, current weather conditions, time of day, and road geometry. Choose the safer path or prepare for the risks ahead.</p>
+        </section>
+
+        <!-- Core Interaction (Mocked) -->
+        <section class="demo" data-section="core-interaction">
+            <h3>How it works</h3>
+            <div class="demo-interface">
+                <div class="demo-input-group">
+                    <label for="demo-start">Starting point</label>
+                    <input type="text" id="demo-start" placeholder="123 Main St, Austin, TX" readonly>
+                </div>
+                <div class="demo-input-group">
+                    <label for="demo-end">Destination</label>
+                    <input type="text" id="demo-end" placeholder="456 Oak Ave, Austin, TX" readonly>
+                </div>
+                <button class="demo-button" data-interaction="route-analyze">Analyze Route</button>
+                
+                <div class="demo-results">
+                    <div class="route-option">
+                        <div class="route-header">
+                            <span class="route-name">Route 1: via Interstate 35</span>
+                            <span class="safety-score high-risk">Risk Score: 7.2</span>
+                        </div>
+                        <p class="route-details">18 min · 12.4 miles · High traffic density · 3 high-risk intersections</p>
+                    </div>
+                    <div class="route-option recommended">
+                        <div class="route-header">
+                            <span class="route-name">Route 2: via Loop 360</span>
+                            <span class="safety-score low-risk">Risk Score: 3.1</span>
+                        </div>
+                        <p class="route-details">22 min · 14.1 miles · Lower traffic · Better road conditions · Recommended</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Commitment CTA -->
+        <section class="signup" data-section="signup">
+            <h2>Get early access when RideSafe launches in your area</h2>
+            <form id="signup-form" class="signup-form">
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input type="email" id="email" name="email" required placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="city">City or region</label>
+                    <input type="text" id="city" name="city" required placeholder="Austin, TX">
+                </div>
+                <button type="submit" class="cta-button" data-interaction="signup-submit">Notify me at launch</button>
+                <p class="privacy-note">We will only use your email to notify you about RideSafe. No spam. Unsubscribe anytime.</p>
+            </form>
+        </section>
+
+        <!-- Post-Signup Survey (Hidden by default) -->
+        <section class="survey" id="post-signup-survey" style="display: none;" data-section="post-signup-survey">
+            <h2>Thank you for signing up</h2>
+            <p>Help us build something useful. This takes 30 seconds.</p>
+            <form id="survey-form" class="survey-form">
+                <div class="form-group">
+                    <label for="signup-reason">What made you sign up?</label>
+                    <textarea id="signup-reason" name="signup-reason" rows="3" placeholder="I ride to work daily and..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="use-case">When would you use something like this?</label>
+                    <textarea id="use-case" name="use-case" rows="3" placeholder="Before weekend rides, unfamiliar routes..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="dealbreaker">What would make this useless for you?</label>
+                    <textarea id="dealbreaker" name="dealbreaker" rows="3" placeholder="If it required subscription, wasn't accurate..."></textarea>
+                </div>
+                <button type="submit" class="survey-button" data-interaction="survey-submit">Submit feedback</button>
+            </form>
+        </section>
+
+        <!-- Survey Completion Message (Hidden by default) -->
+        <section class="completion" id="completion-message" style="display: none;" data-section="completion">
+            <h2>Feedback received</h2>
+            <p>We will keep you updated on progress.</p>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
