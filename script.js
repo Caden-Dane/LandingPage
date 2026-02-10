@@ -91,6 +91,7 @@ if (demoButton) {
 // Signup form handling
 const signupForm = document.getElementById('signup-form');
 const postSignupSurvey = document.getElementById('post-signup-survey');
+const signupSection = document.querySelector('.signup');
 
 signupForm.addEventListener('submit', function(e) {
     e.preventDefault();
@@ -117,7 +118,7 @@ signupForm.addEventListener('submit', function(e) {
     sessionStorage.setItem('signup_city', city);
     
     // Hide signup form and show survey
-    document.querySelector('.signup').style.display = 'none';
+    signupSection.style.display = 'none';
     postSignupSurvey.style.display = 'block';
     
     // Scroll to survey
@@ -184,4 +185,45 @@ const sectionObserver = new IntersectionObserver(function(entries) {
 // Observe all sections
 document.querySelectorAll('[data-section]').forEach(section => {
     sectionObserver.observe(section);
+});
+
+// Navbar scroll effect
+const navbar = document.getElementById('navbar');
+
+function updateNavbar() {
+    const scrollY = window.pageYOffset;
+    
+    if (scrollY > 100) {
+        navbar.classList.add('scrolled');
+    } else {
+        navbar.classList.remove('scrolled');
+    }
+}
+
+window.addEventListener('scroll', updateNavbar);
+updateNavbar();
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const target = document.querySelector(targetId);
+        
+        if (target) {
+            const navHeight = navbar.offsetHeight;
+            let offsetTop;
+            
+            if (targetId === '#home') {
+                offsetTop = 0;
+            } else {
+                offsetTop = target.offsetTop - navHeight;
+            }
+            
+            window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth'
+            });
+        }
+    });
 });
