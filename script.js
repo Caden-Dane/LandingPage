@@ -28,14 +28,16 @@ function trackScrollDepth() {
         if (scrollPercentage >= parseInt(marker) && !scrollDepthMarkers[marker]) {
             scrollDepthMarkers[marker] = true;
             
-            // Log to console (replace with GA4 event)
+            // Log to console
             console.log('Scroll depth:', marker + '%');
             
-            // Example GA4 event (uncomment when GA4 is configured):
-            // gtag('event', 'scroll_depth', {
-            //     'depth_percentage': marker,
-            //     'traffic_source': sessionStorage.getItem('traffic_source')
-            // });
+            // GA4 event
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'scroll_depth', {
+                    'depth_percentage': marker,
+                    'traffic_source': sessionStorage.getItem('traffic_source')
+                });
+            }
         }
     });
 }
@@ -48,14 +50,16 @@ const pageLoadTime = Date.now();
 window.addEventListener('beforeunload', function() {
     const timeOnPage = Math.round((Date.now() - pageLoadTime) / 1000);
     
-    // Log to console (replace with GA4 event)
+    // Log to console
     console.log('Time on page:', timeOnPage, 'seconds');
     
-    // Example GA4 event (uncomment when GA4 is configured):
-    // gtag('event', 'time_on_page', {
-    //     'duration_seconds': timeOnPage,
-    //     'traffic_source': sessionStorage.getItem('traffic_source')
-    // });
+    // GA4 event
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'time_on_page', {
+            'duration_seconds': timeOnPage,
+            'traffic_source': sessionStorage.getItem('traffic_source')
+        });
+    }
 });
 
 // Interaction tracking for all data-interaction elements
@@ -64,14 +68,16 @@ document.addEventListener('click', function(e) {
     if (element) {
         const interactionType = element.getAttribute('data-interaction');
         
-        // Log to console (replace with GA4 event)
+        // Log to console
         console.log('Interaction:', interactionType);
         
-        // Example GA4 event (uncomment when GA4 is configured):
-        // gtag('event', 'interaction_click', {
-        //     'interaction_type': interactionType,
-        //     'traffic_source': sessionStorage.getItem('traffic_source')
-        // });
+        // GA4 event
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'interaction_click', {
+                'interaction_type': interactionType,
+                'traffic_source': sessionStorage.getItem('traffic_source')
+            });
+        }
     }
 });
 
@@ -99,7 +105,7 @@ signupForm.addEventListener('submit', function(e) {
     const email = document.getElementById('email').value;
     const city = document.getElementById('city').value;
     
-    // Log to console (replace with actual data collection)
+    // Log to console
     console.log('Signup submitted:', {
         email: email,
         city: city,
@@ -107,11 +113,13 @@ signupForm.addEventListener('submit', function(e) {
         timestamp: new Date().toISOString()
     });
     
-    // Example GA4 event (uncomment when GA4 is configured):
-    // gtag('event', 'signup', {
-    //     'city': city,
-    //     'traffic_source': sessionStorage.getItem('traffic_source')
-    // });
+    // GA4 event
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'signup', {
+            'city': city,
+            'traffic_source': sessionStorage.getItem('traffic_source')
+        });
+    }
     
     // Store signup data in sessionStorage
     sessionStorage.setItem('signup_email', email);
@@ -136,7 +144,7 @@ surveyForm.addEventListener('submit', function(e) {
     const useCase = document.getElementById('use-case').value;
     const dealbreaker = document.getElementById('dealbreaker').value;
     
-    // Log to console (replace with actual data collection)
+    // Log to console
     console.log('Survey submitted:', {
         email: sessionStorage.getItem('signup_email'),
         city: sessionStorage.getItem('signup_city'),
@@ -147,10 +155,12 @@ surveyForm.addEventListener('submit', function(e) {
         timestamp: new Date().toISOString()
     });
     
-    // Example GA4 event (uncomment when GA4 is configured):
-    // gtag('event', 'survey_complete', {
-    //     'traffic_source': sessionStorage.getItem('traffic_source')
-    // });
+    // GA4 event
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'survey_complete', {
+            'traffic_source': sessionStorage.getItem('traffic_source')
+        });
+    }
     
     // Hide survey and show completion message
     postSignupSurvey.style.display = 'none';
@@ -170,14 +180,16 @@ const sectionObserver = new IntersectionObserver(function(entries) {
         if (entry.isIntersecting) {
             const sectionName = entry.target.getAttribute('data-section');
             
-            // Log to console (replace with GA4 event)
+            // Log to console
             console.log('Section viewed:', sectionName);
             
-            // Example GA4 event (uncomment when GA4 is configured):
-            // gtag('event', 'section_view', {
-            //     'section_name': sectionName,
-            //     'traffic_source': sessionStorage.getItem('traffic_source')
-            // });
+            // GA4 event
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'section_view', {
+                    'section_name': sectionName,
+                    'traffic_source': sessionStorage.getItem('traffic_source')
+                });
+            }
         }
     });
 }, observerOptions);
