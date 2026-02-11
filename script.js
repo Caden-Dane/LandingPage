@@ -8,7 +8,21 @@ const supabaseClient = window.supabase.createClient(
 
 console.log('SCRIPT VERSION: waitlist_feedback_v3');
 
+(function prefillSignupForm() {
+    const params = new URLSearchParams(window.location.search);
+    const email = params.get('email');
+    const city = params.get('city');
 
+    if (email) {
+        const emailInput = document.getElementById('email');
+        if (emailInput) emailInput.value = email;
+    }
+
+    if (city) {
+        const cityInput = document.getElementById('city');
+        if (cityInput) cityInput.value = city;
+    }
+})();
 
 // Traffic source tracking
 (function() {
