@@ -1,3 +1,12 @@
+const SUPABASE_URL = 'https://kxozpzkumkbipdoeysdv.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4b3pwemt1bWtiaXBkb2V5c2R2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3NjY2NjgsImV4cCI6MjA4NjM0MjY2OH0.jWUZNqBpSZDxcVRwaFphkOgquH5Xoa4tPgvhemQGdjU';
+
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+
 // Traffic source tracking
 (function() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -99,39 +108,40 @@ const signupForm = document.getElementById('signup-form');
 const postSignupSurvey = document.getElementById('post-signup-survey');
 const signupSection = document.querySelector('.signup');
 
-signupForm.addEventListener('submit', function(e) {
+signupForm.addEventListener('submit', async function (e) {
     e.preventDefault();
-    
-    const email = document.getElementById('email').value;
-    const city = document.getElementById('city').value;
-    
-    // Log to console
-    console.log('Signup submitted:', {
-        email: email,
-        city: city,
-        traffic_source: sessionStorage.getItem('traffic_source'),
-        timestamp: new Date().toISOString()
-    });
-    
-    // GA4 event
-    if (typeof gtag !== 'undefined') {
-        gtag('event', 'signup', {
-            'city': city,
-            'traffic_source': sessionStorage.getItem('traffic_source')
-        });
+
+    const email = document.getElementById('email').value.trim();
+    const city = document.getElementById('city').value.trim();
+
+    try {
+        const { error } = await supabase
+            .from('signups')
+            .insert([{ email, city }]);
+
+        if (error) {
+            alert('This email is already registered.');
+            return;
+        }
+
+        // GA4 conversion event (NO PII)
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'signup_submit', {
+                event_category: 'conversion'
+            });
+        }
+
+        // UI flow (unchanged)
+        signupSection.style.display = 'none';
+        postSignupSurvey.style.display = 'block';
+        postSignupSurvey.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    } catch (err) {
+        console.error(err);
+        alert('Signup failed. Please try again.');
     }
-    
-    // Store signup data in sessionStorage
-    sessionStorage.setItem('signup_email', email);
-    sessionStorage.setItem('signup_city', city);
-    
-    // Hide signup form and show survey
-    signupSection.style.display = 'none';
-    postSignupSurvey.style.display = 'block';
-    
-    // Scroll to survey
-    postSignupSurvey.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
+
 
 // Survey form handling
 const surveyForm = document.getElementById('survey-form');
@@ -146,8 +156,6 @@ surveyForm.addEventListener('submit', function(e) {
     
     // Log to console
     console.log('Survey submitted:', {
-        email: sessionStorage.getItem('signup_email'),
-        city: sessionStorage.getItem('signup_city'),
         signup_reason: signupReason,
         use_case: useCase,
         dealbreaker: dealbreaker,
