@@ -6,6 +6,8 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_ANON_KEY
 );
 
+console.log('SCRIPT VERSION: waitlist_feedback_v3');
+
 
 // Traffic source tracking
 (function() {
