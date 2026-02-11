@@ -776,6 +776,30 @@ footer {
         align-items: flex-start;
     }
 
+    .credibility {
+    padding: 40px 50px;
+    background: #000;
+    border-top: 1px solid #222;
+    border-bottom: 1px solid #222;
+}
+
+.credibility-container {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.credibility-text {
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}
+
+.credibility-text strong {
+    color: var(--text-light);
+}
+
+
     footer {
         padding: 30px 20px;
     }
