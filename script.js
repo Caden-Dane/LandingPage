@@ -1,7 +1,7 @@
 const SUPABASE_URL = 'https://kxozpzkumkbipdoeysdv.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4b3pwemt1bWtiaXBkb2V5c2R2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3NjY2NjgsImV4cCI6MjA4NjM0MjY2OH0.jWUZNqBpSZDxcVRwaFphkOgquH5Xoa4tPgvhemQGdjU';
 
-const supabase = window.supabase.createClient(
+const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
@@ -115,7 +115,7 @@ signupForm.addEventListener('submit', async function (e) {
     const city = document.getElementById('city').value.trim();
 
     try {
-        const { error } = await supabase
+        const { error } = await supabaseClient
             .from('signups')
             .insert([{ email, city }]);
 
