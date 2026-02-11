@@ -9,6 +9,7 @@ const supabaseClient = window.supabase.createClient(
 console.log('SCRIPT VERSION: waitlist_feedback_v3');
 
 
+
 // Traffic source tracking
 (function() {
     const urlParams = new URLSearchParams(window.location.search);
