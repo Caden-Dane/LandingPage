@@ -185,7 +185,6 @@ surveyForm.addEventListener('submit', async function(e) {
             motivation: signupReason,
             usage_timing: useCase,
             dealbreakers: dealbreaker,
-            traffic_source: sessionStorage.getItem('traffic_source')
         }]);
 
     if (error) {
