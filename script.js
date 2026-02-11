@@ -115,14 +115,29 @@ signupForm.addEventListener('submit', async function (e) {
     const city = document.getElementById('city').value.trim();
 
     try {
-        const { error } = await supabaseClient
-            .from('signups')
-            .insert([{ email, city }]);
+        const { data, error } = await supabaseClient
+          .from('signups')
+          .insert([{ email, city }])
+          .select()
+          .single();
 
+        
         if (error) {
             alert('This email is already registered.');
             return;
         }
+        
+        if (!data || !data.id) {
+            console.error('Signup returned no ID');
+            alert('Signup failed. Please try again.');
+            return;
+        }
+
+
+
+              // Store signup_id for survey linkage
+        sessionStorage.setItem('ridesafe_signup_id', data.id);
+
 
         // GA4 conversion event (NO PII)
         if (typeof gtag !== 'undefined') {
@@ -147,36 +162,49 @@ signupForm.addEventListener('submit', async function (e) {
 const surveyForm = document.getElementById('survey-form');
 const completionMessage = document.getElementById('completion-message');
 
-surveyForm.addEventListener('submit', function(e) {
+surveyForm.addEventListener('submit', async function(e) {
     e.preventDefault();
-    
-    const signupReason = document.getElementById('signup-reason').value;
-    const useCase = document.getElementById('use-case').value;
-    const dealbreaker = document.getElementById('dealbreaker').value;
-    
-    // Log to console
-    console.log('Survey submitted:', {
-        signup_reason: signupReason,
-        use_case: useCase,
-        dealbreaker: dealbreaker,
-        traffic_source: sessionStorage.getItem('traffic_source'),
-        timestamp: new Date().toISOString()
-    });
-    
+
+    const signupId = sessionStorage.getItem('ridesafe_signup_id');
+
+    if (!signupId) {
+        console.error('Missing signup_id — cannot save feedback');
+        return;
+    }
+
+    const signupReason = document.getElementById('signup-reason').value.trim();
+    const useCase = document.getElementById('use-case').value.trim();
+    const dealbreaker = document.getElementById('dealbreaker').value.trim();
+
+    const { error } = await supabaseClient
+        .from('signup_feedback')
+        .insert([{
+            signup_id: signupId,
+            motivation: signupReason,
+            usage_timing: useCase,
+            dealbreakers: dealbreaker,
+            traffic_source: sessionStorage.getItem('traffic_source')
+        }]);
+
+    if (error) {
+        console.error('Survey insert failed:', error);
+        alert('Failed to submit feedback. Please try again.');
+        return;
+    }
+
     // GA4 event
     if (typeof gtag !== 'undefined') {
         gtag('event', 'survey_complete', {
-            'traffic_source': sessionStorage.getItem('traffic_source')
+            traffic_source: sessionStorage.getItem('traffic_source')
         });
     }
-    
-    // Hide survey and show completion message
+
+    // UI completion
     postSignupSurvey.style.display = 'none';
     completionMessage.style.display = 'block';
-    
-    // Scroll to completion message
     completionMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
+
 
 // Section visibility tracking (log when sections come into view)
 const observerOptions = {
