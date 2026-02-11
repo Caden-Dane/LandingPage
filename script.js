@@ -177,7 +177,7 @@ surveyForm.addEventListener('submit', async function(e) {
     const dealbreaker = document.getElementById('dealbreaker').value.trim();
 
     const { error } = await supabaseClient
-        .from('signup_feedback')
+        .from('waitlist_feedback')
         .insert([{
             signup_id: signupId,
             motivation: signupReason,
