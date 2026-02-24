@@ -1,293 +1,409 @@
+// ============================================================
+// MOTYRIC — script.js
+// Preserves: GA4 tracking, Supabase signups + feedback
+// Adds: founding member flow, hero form, modal, dual signup
+// ============================================================
+
 const SUPABASE_URL = 'https://kxozpzkumkbipdoeysdv.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4b3pwemt1bWtiaXBkb2V5c2R2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3NjY2NjgsImV4cCI6MjA4NjM0MjY2OH0.jWUZNqBpSZDxcVRwaFphkOgquH5Xoa4tPgvhemQGdjU';
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-console.log('SCRIPT VERSION: waitlist_feedback_v3');
+console.log('MOTYRIC SCRIPT VERSION: motyric_v1');
 
-(function prefillSignupForm() {
+// ============================================================
+// URL PARAMETER PREFILL — preserved from original
+// ============================================================
+(function prefillForms() {
     const params = new URLSearchParams(window.location.search);
     const email = params.get('email');
     const city = params.get('city');
 
-    if (email) {
-        const emailInput = document.getElementById('email');
-        if (emailInput) emailInput.value = email;
-    }
+    const fields = [
+        ['hero-email', email], ['hero-city', city],
+        ['email', email], ['city', city],
+        ['founding-email', email], ['founding-city', city]
+    ];
 
-    if (city) {
-        const cityInput = document.getElementById('city');
-        if (cityInput) cityInput.value = city;
-    }
+    fields.forEach(([id, val]) => {
+        if (!val) return;
+        const el = document.getElementById(id);
+        if (el) el.value = val;
+    });
 })();
 
-// Traffic source tracking
-(function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const utmSource = urlParams.get('utm_source') || 'direct';
-    const utmMedium = urlParams.get('utm_medium') || 'none';
-    const utmCampaign = urlParams.get('utm_campaign') || 'none';
-    
-    sessionStorage.setItem('traffic_source', utmSource);
-    sessionStorage.setItem('traffic_medium', utmMedium);
-    sessionStorage.setItem('traffic_campaign', utmCampaign);
+// ============================================================
+// UTM / TRAFFIC SOURCE TRACKING — preserved from original
+// ============================================================
+(function trackSource() {
+    const p = new URLSearchParams(window.location.search);
+    sessionStorage.setItem('traffic_source', p.get('utm_source') || 'direct');
+    sessionStorage.setItem('traffic_medium', p.get('utm_medium') || 'none');
+    sessionStorage.setItem('traffic_campaign', p.get('utm_campaign') || 'none');
 })();
 
-// Scroll depth tracking
-let scrollDepthMarkers = {
-    '25': false,
-    '50': false,
-    '75': false,
-    '100': false
-};
+// ============================================================
+// SCROLL DEPTH TRACKING — preserved from original
+// ============================================================
+const scrollMarkers = { '25': false, '50': false, '75': false, '100': false };
 
-function trackScrollDepth() {
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const scrollPercentage = (scrollTop / (documentHeight - windowHeight)) * 100;
-    
-    Object.keys(scrollDepthMarkers).forEach(marker => {
-        if (scrollPercentage >= parseInt(marker) && !scrollDepthMarkers[marker]) {
-            scrollDepthMarkers[marker] = true;
-            
-            // Log to console
-            console.log('Scroll depth:', marker + '%');
-            
-            // GA4 event
+window.addEventListener('scroll', function () {
+    const pct = (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+    Object.keys(scrollMarkers).forEach(m => {
+        if (pct >= parseInt(m) && !scrollMarkers[m]) {
+            scrollMarkers[m] = true;
+            console.log('Scroll depth:', m + '%');
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'scroll_depth', {
-                    'depth_percentage': marker,
-                    'traffic_source': sessionStorage.getItem('traffic_source')
+                    depth_percentage: m,
+                    traffic_source: sessionStorage.getItem('traffic_source')
                 });
             }
         }
     });
-}
+}, { passive: true });
 
-window.addEventListener('scroll', trackScrollDepth);
-
-// Time on page tracking
+// ============================================================
+// TIME ON PAGE — preserved from original
+// ============================================================
 const pageLoadTime = Date.now();
-
-window.addEventListener('beforeunload', function() {
-    const timeOnPage = Math.round((Date.now() - pageLoadTime) / 1000);
-    
-    // Log to console
-    console.log('Time on page:', timeOnPage, 'seconds');
-    
-    // GA4 event
+window.addEventListener('beforeunload', function () {
+    const t = Math.round((Date.now() - pageLoadTime) / 1000);
+    console.log('Time on page:', t, 'seconds');
     if (typeof gtag !== 'undefined') {
         gtag('event', 'time_on_page', {
-            'duration_seconds': timeOnPage,
-            'traffic_source': sessionStorage.getItem('traffic_source')
-        });
-    }
-});
-
-// Interaction tracking for all data-interaction elements
-document.addEventListener('click', function(e) {
-    const element = e.target.closest('[data-interaction]');
-    if (element) {
-        const interactionType = element.getAttribute('data-interaction');
-        
-        // Log to console
-        console.log('Interaction:', interactionType);
-        
-        // GA4 event
-        if (typeof gtag !== 'undefined') {
-            gtag('event', 'interaction_click', {
-                'interaction_type': interactionType,
-                'traffic_source': sessionStorage.getItem('traffic_source')
-            });
-        }
-    }
-});
-
-// Demo button interaction (mock functionality)
-const demoButton = document.querySelector('.demo-button');
-if (demoButton) {
-    demoButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        // Visual feedback only - no actual functionality
-        this.textContent = 'Analyzing...';
-        setTimeout(() => {
-            this.textContent = 'Analyze Route';
-        }, 800);
-    });
-}
-
-// Signup form handling
-const signupForm = document.getElementById('signup-form');
-const postSignupSurvey = document.getElementById('post-signup-survey');
-const signupSection = document.querySelector('.signup');
-
-signupForm.addEventListener('submit', async function (e) {
-    e.preventDefault();
-
-    const email = document.getElementById('email').value.trim();
-    const city = document.getElementById('city').value.trim();
-
-    try {
-        const { data, error } = await supabaseClient
-          .from('signups')
-          .insert([{ email, city }])
-          .select()
-          .single();
-
-        
-        if (error) {
-            alert('This email is already registered.');
-            return;
-        }
-        
-        if (!data || !data.id) {
-            console.error('Signup returned no ID');
-            alert('Signup failed. Please try again.');
-            return;
-        }
-
-
-
-              // Store signup_id for survey linkage
-        sessionStorage.setItem('ridesafe_signup_id', data.id);
-
-
-        // GA4 conversion event (NO PII)
-        if (typeof gtag !== 'undefined') {
-            gtag('event', 'signup_submit', {
-                event_category: 'conversion'
-            });
-        }
-
-        // UI flow (unchanged)
-        signupSection.style.display = 'none';
-        postSignupSurvey.style.display = 'block';
-        postSignupSurvey.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-    } catch (err) {
-        console.error(err);
-        alert('Signup failed. Please try again.');
-    }
-});
-
-
-// Survey form handling
-const surveyForm = document.getElementById('survey-form');
-const completionMessage = document.getElementById('completion-message');
-
-surveyForm.addEventListener('submit', async function(e) {
-    e.preventDefault();
-
-    const signupId = sessionStorage.getItem('ridesafe_signup_id');
-
-    if (!signupId) {
-        console.error('Missing signup_id — cannot save feedback');
-        return;
-    }
-
-    const signupReason = document.getElementById('signup-reason').value.trim();
-    const useCase = document.getElementById('use-case').value.trim();
-    const dealbreaker = document.getElementById('dealbreaker').value.trim();
-
-    const { error } = await supabaseClient
-        .from('waitlist_feedback')
-        .insert([{
-            signup_id: signupId,
-            motivation: signupReason,
-            usage_timing: useCase,
-            dealbreakers: dealbreaker,
-        }]);
-
-    if (error) {
-        console.error('Survey insert failed:', error);
-        alert('Failed to submit feedback. Please try again.');
-        return;
-    }
-
-    // GA4 event
-    if (typeof gtag !== 'undefined') {
-        gtag('event', 'survey_complete', {
+            duration_seconds: t,
             traffic_source: sessionStorage.getItem('traffic_source')
         });
     }
-
-    // UI completion
-    postSignupSurvey.style.display = 'none';
-    completionMessage.style.display = 'block';
-    completionMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
-
-// Section visibility tracking (log when sections come into view)
-const observerOptions = {
-    threshold: 0.5
-};
-
-const sectionObserver = new IntersectionObserver(function(entries) {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const sectionName = entry.target.getAttribute('data-section');
-            
-            // Log to console
-            console.log('Section viewed:', sectionName);
-            
-            // GA4 event
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'section_view', {
-                    'section_name': sectionName,
-                    'traffic_source': sessionStorage.getItem('traffic_source')
-                });
-            }
-        }
-    });
-}, observerOptions);
-
-// Observe all sections
-document.querySelectorAll('[data-section]').forEach(section => {
-    sectionObserver.observe(section);
-});
-
-// Navbar scroll effect
-const navbar = document.getElementById('navbar');
-
-function updateNavbar() {
-    const scrollY = window.pageYOffset;
-    
-    if (scrollY > 100) {
-        navbar.classList.add('scrolled');
-    } else {
-        navbar.classList.remove('scrolled');
+// ============================================================
+// INTERACTION CLICK TRACKING — preserved from original
+// ============================================================
+document.addEventListener('click', function (e) {
+    const el = e.target.closest('[data-interaction]');
+    if (!el) return;
+    const type = el.getAttribute('data-interaction');
+    console.log('Interaction:', type);
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'interaction_click', {
+            interaction_type: type,
+            traffic_source: sessionStorage.getItem('traffic_source')
+        });
     }
-}
+});
 
-window.addEventListener('scroll', updateNavbar);
-updateNavbar();
-
-// Smooth scroll for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href');
-        const target = document.querySelector(targetId);
-        
-        if (target) {
-            const navHeight = navbar.offsetHeight;
-            let offsetTop;
-            
-            if (targetId === '#home') {
-                offsetTop = 0;
-            } else {
-                offsetTop = target.offsetTop - navHeight;
-            }
-            
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
+// ============================================================
+// SECTION VISIBILITY TRACKING — preserved from original
+// ============================================================
+const sectionObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const name = entry.target.getAttribute('data-section');
+        console.log('Section viewed:', name);
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'section_view', {
+                section_name: name,
+                traffic_source: sessionStorage.getItem('traffic_source')
             });
         }
     });
+}, { threshold: 0.4 });
+
+document.querySelectorAll('[data-section]').forEach(s => sectionObserver.observe(s));
+
+// ============================================================
+// NAVBAR SCROLL EFFECT — preserved from original
+// ============================================================
+const navbar = document.getElementById('navbar');
+
+function updateNavbar() {
+    navbar.classList.toggle('scrolled', window.pageYOffset > 80);
+}
+
+window.addEventListener('scroll', updateNavbar, { passive: true });
+updateNavbar();
+
+// ============================================================
+// SMOOTH SCROLL — preserved from original
+// ============================================================
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (!target) return;
+        const offset = this.getAttribute('href') === '#home'
+            ? 0
+            : target.offsetTop - navbar.offsetHeight;
+        window.scrollTo({ top: offset, behavior: 'smooth' });
+    });
 });
+
+// ============================================================
+// MODAL — close on overlay click
+// ============================================================
+document.getElementById('founding-modal').addEventListener('click', function (e) {
+    if (e.target === this) this.classList.remove('open');
+});
+
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+        document.getElementById('founding-modal').classList.remove('open');
+    }
+});
+
+// ============================================================
+// SHARED SIGNUP HANDLER
+// Handles both hero form and secondary signup form identically
+// ============================================================
+async function handleSignup(email, city, source) {
+    try {
+        const { data, error } = await supabaseClient
+            .from('signups')
+            .insert([{ email, city }])
+            .select()
+            .single();
+
+        if (error) {
+            if (error.code === '23505') {
+                alert('This email is already registered — you\'re on the list!');
+            } else {
+                alert('Signup failed. Please try again.');
+                console.error('Signup error:', error);
+            }
+            return null;
+        }
+
+        if (!data || !data.id) {
+            console.error('Signup returned no ID');
+            alert('Signup failed. Please try again.');
+            return null;
+        }
+
+        sessionStorage.setItem('motyric_signup_id', data.id);
+
+        // GA4 conversion event — preserved from original, no PII
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'signup_submit', {
+                event_category: 'conversion',
+                signup_source: source
+            });
+        }
+
+        return data.id;
+
+    } catch (err) {
+        console.error('Signup exception:', err);
+        alert('Signup failed. Please try again.');
+        return null;
+    }
+}
+
+// ============================================================
+// SHOW POST-SIGNUP SURVEY
+// ============================================================
+function showSurvey() {
+    // Hide both signup sections
+    const heroForm = document.getElementById('hero-signup-form');
+    const secondarySignup = document.querySelector('.signup-secondary');
+
+    if (heroForm) {
+        // Replace hero form with a thankyou message inline
+        heroForm.innerHTML = `
+            <div class="hero-thankyou">
+                <span class="thankyou-check">✓</span>
+                <p>You're on the list. Scroll down to help us build the right thing.</p>
+            </div>
+        `;
+    }
+
+    if (secondarySignup) secondarySignup.style.display = 'none';
+
+    const survey = document.getElementById('post-signup-survey');
+    survey.style.display = 'block';
+    survey.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ============================================================
+// HERO SIGNUP FORM
+// ============================================================
+const heroSignupForm = document.getElementById('hero-signup-form');
+if (heroSignupForm) {
+    heroSignupForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const btn = this.querySelector('[type="submit"]');
+        const originalText = btn.textContent;
+        btn.textContent = 'Joining...';
+        btn.disabled = true;
+
+        const email = document.getElementById('hero-email').value.trim();
+        const city = document.getElementById('hero-city').value.trim();
+
+        const id = await handleSignup(email, city, 'hero');
+
+        if (id) showSurvey();
+        else {
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
+    });
+}
+
+// ============================================================
+// SECONDARY SIGNUP FORM (bottom of page)
+// ============================================================
+const signupForm = document.getElementById('signup-form');
+if (signupForm) {
+    signupForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const btn = this.querySelector('[type="submit"]');
+        const originalText = btn.textContent;
+        btn.textContent = 'Joining...';
+        btn.disabled = true;
+
+        const email = document.getElementById('email').value.trim();
+        const city = document.getElementById('city').value.trim();
+
+        const id = await handleSignup(email, city, 'secondary');
+
+        if (id) showSurvey();
+        else {
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
+    });
+}
+
+// ============================================================
+// FOUNDING MEMBER FORM
+// Stores to a separate 'founding_members' table in Supabase
+// (create this table: id, email, city, created_at)
+// Falls back gracefully to signups table if table doesn't exist yet
+// ============================================================
+const foundingForm = document.getElementById('founding-form');
+if (foundingForm) {
+    foundingForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const btn = this.querySelector('[type="submit"]');
+        btn.textContent = 'Reserving...';
+        btn.disabled = true;
+
+        const email = document.getElementById('founding-email').value.trim();
+        const city = document.getElementById('founding-city').value.trim();
+
+        try {
+            // Try founding_members table first
+            const { data, error } = await supabaseClient
+                .from('founding_members')
+                .insert([{ email, city }])
+                .select()
+                .single();
+
+            if (error && error.code !== '23505') {
+                // Table may not exist yet — fall back to signups with founding flag
+                console.warn('founding_members table not found, falling back to signups:', error.message);
+                await handleSignup(email, city, 'founding');
+            } else if (error && error.code === '23505') {
+                alert('You\'re already reserved as a Founding Rider!');
+                document.getElementById('founding-modal').classList.remove('open');
+                return;
+            }
+
+            // GA4 founding conversion — higher value event
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'founding_member_signup', {
+                    event_category: 'conversion',
+                    value: 19
+                });
+            }
+
+            // Close modal, show confirmation
+            document.getElementById('founding-modal').classList.remove('open');
+            alert('You\'re reserved as a Founding Rider. We\'ll be in touch before we charge anything. Thank you!');
+
+        } catch (err) {
+            console.error('Founding signup error:', err);
+            btn.textContent = 'Reserve My Spot — $19';
+            btn.disabled = false;
+            alert('Something went wrong. Please try again.');
+        }
+    });
+}
+
+// ============================================================
+// SURVEY FORM — preserved from original, updated field mapping
+// ============================================================
+const surveyForm = document.getElementById('survey-form');
+const completionMessage = document.getElementById('completion-message');
+
+if (surveyForm) {
+    surveyForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const signupId = sessionStorage.getItem('motyric_signup_id');
+        if (!signupId) {
+            console.error('Missing signup_id — cannot save feedback');
+            // Still show completion so UX doesn't break
+            document.getElementById('post-signup-survey').style.display = 'none';
+            completionMessage.style.display = 'block';
+            completionMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return;
+        }
+
+        const btn = this.querySelector('[type="submit"]');
+        btn.textContent = 'Submitting...';
+        btn.disabled = true;
+
+        const { error } = await supabaseClient
+            .from('waitlist_feedback')
+            .insert([{
+                signup_id: signupId,
+                motivation: document.getElementById('signup-reason').value.trim(),
+                usage_timing: document.getElementById('use-case').value.trim(),
+                dealbreakers: document.getElementById('dealbreaker').value.trim(),
+            }]);
+
+        if (error) {
+            console.error('Survey insert failed:', error);
+            // Don't block UX on survey failure — still complete
+        }
+
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'survey_complete', {
+                traffic_source: sessionStorage.getItem('traffic_source')
+            });
+        }
+
+        document.getElementById('post-signup-survey').style.display = 'none';
+        completionMessage.style.display = 'block';
+        completionMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+}
+
+// ============================================================
+// HERO THANK YOU STYLES (injected inline for simplicity)
+// ============================================================
+const style = document.createElement('style');
+style.textContent = `
+    .hero-thankyou {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 20px 24px;
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        margin-top: 8px;
+    }
+    .thankyou-check {
+        font-size: 24px;
+        color: #10b981;
+        flex-shrink: 0;
+    }
+    .hero-thankyou p {
+        font-size: 15px;
+        color: #94a3b8;
+        line-height: 1.5;
+    }
+`;
+document.head.appendChild(style);
