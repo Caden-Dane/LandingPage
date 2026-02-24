@@ -2,6 +2,7 @@
 // MOTYRIC — script.js
 // Preserves: GA4 tracking, Supabase signups + feedback
 // Adds: founding member flow, hero form, modal, dual signup
+// Updated: custom toast notifications replacing all alert() calls
 // ============================================================
 
 const SUPABASE_URL = 'https://kxozpzkumkbipdoeysdv.supabase.co';
@@ -9,7 +10,181 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-console.log('MOTYRIC SCRIPT VERSION: motyric_v1');
+console.log('MOTYRIC SCRIPT VERSION: motyric_v2');
+
+// ============================================================
+// TOAST NOTIFICATION SYSTEM
+// Replaces all alert() calls with branded notifications
+// Types: 'success' | 'error' | 'info'
+// ============================================================
+
+let toastQueue = [];
+let toastVisible = false;
+
+function showToast(message, type = 'info', duration = 4500) {
+    toastQueue.push({ message, type, duration });
+    if (!toastVisible) processToastQueue();
+}
+
+function processToastQueue() {
+    if (toastQueue.length === 0) {
+        toastVisible = false;
+        return;
+    }
+
+    toastVisible = true;
+    const { message, type, duration } = toastQueue.shift();
+
+    const existing = document.getElementById('motyric-toast');
+    if (existing) existing.remove();
+
+    const icons = {
+        success: `<svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <circle cx="9" cy="9" r="8" stroke="#10b981" stroke-width="1.5"/>
+                    <path d="M5.5 9l2.5 2.5 4.5-4.5" stroke="#10b981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>`,
+        error:   `<svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <circle cx="9" cy="9" r="8" stroke="#ef4444" stroke-width="1.5"/>
+                    <path d="M6 6l6 6M12 6l-6 6" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>`,
+        info:    `<svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <circle cx="9" cy="9" r="8" stroke="#f59e0b" stroke-width="1.5"/>
+                    <path d="M9 8v5M9 6v.5" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>`
+    };
+
+    const accentColors = {
+        success: '#10b981',
+        error:   '#ef4444',
+        info:    '#f59e0b'
+    };
+
+    const toast = document.createElement('div');
+    toast.id = 'motyric-toast';
+    toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', 'polite');
+
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 32px;
+        right: 32px;
+        z-index: 9999;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px 20px;
+        background: #1a2535;
+        border: 1px solid ${accentColors[type]}40;
+        border-left: 3px solid ${accentColors[type]};
+        max-width: 380px;
+        min-width: 280px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        font-family: 'Barlow', sans-serif;
+        overflow: hidden;
+        animation: toastIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        cursor: pointer;
+    `;
+
+    toast.innerHTML = `
+        <div style="flex-shrink:0; margin-top:1px;">${icons[type]}</div>
+        <div style="flex:1;">
+            <p style="
+                font-size: 14px;
+                color: #f1f5f9;
+                line-height: 1.5;
+                margin: 0;
+            ">${message}</p>
+        </div>
+        <button aria-label="Dismiss" style="
+            flex-shrink: 0;
+            background: none;
+            border: none;
+            color: #64748b;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 0 0 0 8px;
+            line-height: 1;
+            transition: color 0.2s ease;
+            margin-top: -1px;
+        " onmouseover="this.style.color='#f1f5f9'" onmouseout="this.style.color='#64748b'">&#x2715;</button>
+        <div style="
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 2px;
+            width: 100%;
+            background: ${accentColors[type]};
+            transform-origin: left;
+            animation: toastProgress ${duration}ms linear forwards;
+        "></div>
+    `;
+
+    document.body.appendChild(toast);
+
+    let dismissed = false;
+    function dismissToast() {
+        if (dismissed) return;
+        dismissed = true;
+        clearTimeout(timer);
+        toast.style.animation = 'toastOut 0.25s ease forwards';
+        toast.addEventListener('animationend', () => {
+            toast.remove();
+            setTimeout(processToastQueue, 100);
+        }, { once: true });
+    }
+
+    toast.addEventListener('click', dismissToast);
+    const timer = setTimeout(dismissToast, duration);
+}
+
+// ============================================================
+// STYLE INJECTION — toast keyframes + hero thankyou
+// ============================================================
+(function injectStyles() {
+    const s = document.createElement('style');
+    s.textContent = `
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(16px) scale(0.96); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes toastOut {
+            from { opacity: 1; transform: translateY(0) scale(1); }
+            to   { opacity: 0; transform: translateY(8px) scale(0.96); }
+        }
+        @keyframes toastProgress {
+            from { transform: scaleX(1); }
+            to   { transform: scaleX(0); }
+        }
+        @media (max-width: 600px) {
+            #motyric-toast {
+                bottom: 16px !important;
+                right: 16px !important;
+                left: 16px !important;
+                max-width: none !important;
+            }
+        }
+        .hero-thankyou {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px 24px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            margin-top: 8px;
+        }
+        .thankyou-check {
+            font-size: 24px;
+            color: #10b981;
+            flex-shrink: 0;
+        }
+        .hero-thankyou p {
+            font-size: 15px;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+    `;
+    document.head.appendChild(s);
+})();
 
 // ============================================================
 // URL PARAMETER PREFILL — preserved from original
@@ -141,7 +316,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 });
 
 // ============================================================
-// MODAL — close on overlay click
+// MODAL — close on overlay click and escape key
 // ============================================================
 document.getElementById('founding-modal').addEventListener('click', function (e) {
     if (e.target === this) this.classList.remove('open');
@@ -155,7 +330,6 @@ document.addEventListener('keydown', function (e) {
 
 // ============================================================
 // SHARED SIGNUP HANDLER
-// Handles both hero form and secondary signup form identically
 // ============================================================
 async function handleSignup(email, city, source) {
     try {
@@ -167,9 +341,9 @@ async function handleSignup(email, city, source) {
 
         if (error) {
             if (error.code === '23505') {
-                alert('This email is already registered — you\'re on the list!');
+                showToast("You're already on the list — we'll be in touch.", 'info');
             } else {
-                alert('Signup failed. Please try again.');
+                showToast('Signup failed. Please try again.', 'error');
                 console.error('Signup error:', error);
             }
             return null;
@@ -177,13 +351,12 @@ async function handleSignup(email, city, source) {
 
         if (!data || !data.id) {
             console.error('Signup returned no ID');
-            alert('Signup failed. Please try again.');
+            showToast('Signup failed. Please try again.', 'error');
             return null;
         }
 
         sessionStorage.setItem('motyric_signup_id', data.id);
 
-        // GA4 conversion event — preserved from original, no PII
         if (typeof gtag !== 'undefined') {
             gtag('event', 'signup_submit', {
                 event_category: 'conversion',
@@ -195,7 +368,7 @@ async function handleSignup(email, city, source) {
 
     } catch (err) {
         console.error('Signup exception:', err);
-        alert('Signup failed. Please try again.');
+        showToast('Signup failed. Please try again.', 'error');
         return null;
     }
 }
@@ -204,15 +377,13 @@ async function handleSignup(email, city, source) {
 // SHOW POST-SIGNUP SURVEY
 // ============================================================
 function showSurvey() {
-    // Hide both signup sections
     const heroForm = document.getElementById('hero-signup-form');
     const secondarySignup = document.querySelector('.signup-secondary');
 
     if (heroForm) {
-        // Replace hero form with a thankyou message inline
         heroForm.innerHTML = `
             <div class="hero-thankyou">
-                <span class="thankyou-check">✓</span>
+                <span class="thankyou-check">&#x2713;</span>
                 <p>You're on the list. Scroll down to help us build the right thing.</p>
             </div>
         `;
@@ -242,8 +413,9 @@ if (heroSignupForm) {
 
         const id = await handleSignup(email, city, 'hero');
 
-        if (id) showSurvey();
-        else {
+        if (id) {
+            showSurvey();
+        } else {
             btn.textContent = originalText;
             btn.disabled = false;
         }
@@ -251,7 +423,7 @@ if (heroSignupForm) {
 }
 
 // ============================================================
-// SECONDARY SIGNUP FORM (bottom of page)
+// SECONDARY SIGNUP FORM
 // ============================================================
 const signupForm = document.getElementById('signup-form');
 if (signupForm) {
@@ -267,8 +439,9 @@ if (signupForm) {
 
         const id = await handleSignup(email, city, 'secondary');
 
-        if (id) showSurvey();
-        else {
+        if (id) {
+            showSurvey();
+        } else {
             btn.textContent = originalText;
             btn.disabled = false;
         }
@@ -277,15 +450,13 @@ if (signupForm) {
 
 // ============================================================
 // FOUNDING MEMBER FORM
-// Stores to a separate 'founding_members' table in Supabase
-// (create this table: id, email, city, created_at)
-// Falls back gracefully to signups table if table doesn't exist yet
 // ============================================================
 const foundingForm = document.getElementById('founding-form');
 if (foundingForm) {
     foundingForm.addEventListener('submit', async function (e) {
         e.preventDefault();
         const btn = this.querySelector('[type="submit"]');
+        const originalText = btn.textContent;
         btn.textContent = 'Reserving...';
         btn.disabled = true;
 
@@ -293,24 +464,25 @@ if (foundingForm) {
         const city = document.getElementById('founding-city').value.trim();
 
         try {
-            // Try founding_members table first
             const { data, error } = await supabaseClient
                 .from('founding_members')
                 .insert([{ email, city }])
                 .select()
                 .single();
 
-            if (error && error.code !== '23505') {
-                // Table may not exist yet — fall back to signups with founding flag
-                console.warn('founding_members table not found, falling back to signups:', error.message);
-                await handleSignup(email, city, 'founding');
-            } else if (error && error.code === '23505') {
-                alert('You\'re already reserved as a Founding Rider!');
+            if (error && error.code === '23505') {
+                showToast("You're already reserved as a Founding Rider!", 'info');
                 document.getElementById('founding-modal').classList.remove('open');
+                btn.textContent = originalText;
+                btn.disabled = false;
                 return;
             }
 
-            // GA4 founding conversion — higher value event
+            if (error && error.code !== '23505') {
+                console.warn('founding_members insert error, falling back to signups:', error.message);
+                await handleSignup(email, city, 'founding');
+            }
+
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'founding_member_signup', {
                     event_category: 'conversion',
@@ -318,21 +490,24 @@ if (foundingForm) {
                 });
             }
 
-            // Close modal, show confirmation
             document.getElementById('founding-modal').classList.remove('open');
-            alert('You\'re reserved as a Founding Rider. We\'ll be in touch before we charge anything. Thank you!');
+            showToast(
+                "You're reserved as a Founding Rider. We'll reach out before we charge anything.",
+                'success',
+                6000
+            );
 
         } catch (err) {
             console.error('Founding signup error:', err);
-            btn.textContent = 'Reserve My Spot — $19';
+            showToast('Something went wrong. Please try again.', 'error');
+            btn.textContent = originalText;
             btn.disabled = false;
-            alert('Something went wrong. Please try again.');
         }
     });
 }
 
 // ============================================================
-// SURVEY FORM — preserved from original, updated field mapping
+// SURVEY FORM
 // ============================================================
 const surveyForm = document.getElementById('survey-form');
 const completionMessage = document.getElementById('completion-message');
@@ -344,7 +519,6 @@ if (surveyForm) {
         const signupId = sessionStorage.getItem('motyric_signup_id');
         if (!signupId) {
             console.error('Missing signup_id — cannot save feedback');
-            // Still show completion so UX doesn't break
             document.getElementById('post-signup-survey').style.display = 'none';
             completionMessage.style.display = 'block';
             completionMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -366,7 +540,6 @@ if (surveyForm) {
 
         if (error) {
             console.error('Survey insert failed:', error);
-            // Don't block UX on survey failure — still complete
         }
 
         if (typeof gtag !== 'undefined') {
@@ -380,30 +553,3 @@ if (surveyForm) {
         completionMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 }
-
-// ============================================================
-// HERO THANK YOU STYLES (injected inline for simplicity)
-// ============================================================
-const style = document.createElement('style');
-style.textContent = `
-    .hero-thankyou {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        padding: 20px 24px;
-        background: rgba(16, 185, 129, 0.1);
-        border: 1px solid rgba(16, 185, 129, 0.3);
-        margin-top: 8px;
-    }
-    .thankyou-check {
-        font-size: 24px;
-        color: #10b981;
-        flex-shrink: 0;
-    }
-    .hero-thankyou p {
-        font-size: 15px;
-        color: #94a3b8;
-        line-height: 1.5;
-    }
-`;
-document.head.appendChild(style);
