@@ -2,15 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Motyric — Ride Smarter</title>
     <meta name="description" content="Route intelligence for motorcycle riders. Know the risk before you twist the throttle.">
+    <meta name="theme-color" content="#0b1120">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-
-    <!-- Google Analytics 4 — preserved from original -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QD0MNDVYHP"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -21,9 +22,6 @@
 </head>
 <body>
 
-    <!-- ============================================================
-         NAV
-    ============================================================ -->
     <nav id="navbar">
         <div class="nav-container">
             <a href="#home" class="logo-link">
@@ -34,68 +32,66 @@
                 </svg>
                 <span class="logo-text">Motyric</span>
             </a>
-            <a href="#signup" class="nav-cta">Get Early Access</a>
+            <a href="#signup" class="nav-cta" data-interaction="nav-cta-click">Early Access</a>
         </div>
     </nav>
 
-    <!-- ============================================================
-         HERO — CTA visible above the fold
-    ============================================================ -->
+    <!-- HERO: badge → headline → desc → form → social proof → route cards -->
     <section class="hero" id="home" data-section="hero">
         <div class="hero-grain"></div>
         <div class="hero-glow"></div>
         <div class="hero-container">
-            <div class="hero-content">
-                <div class="hero-badge">
-                    <span class="badge-dot"></span>
-                    Route Intelligence for Motorcycle Riders
-                </div>
-                <h1 class="hero-title">
-                    Know the risk.<br>
-                    <em>Before you ride.</em>
-                </h1>
-                <p class="hero-description">
-                    Motyric scores your routes using real motorcycle crash data, weather patterns, and time-of-day risk — so you make smarter decisions before the engine starts.
-                </p>
 
-                <!-- INLINE SIGNUP FORM — CTA above the fold -->
-                <form id="hero-signup-form" class="hero-form" data-section="hero-signup">
-                    <div class="hero-form-fields">
-                        <input type="email" id="hero-email" name="email" required placeholder="your@email.com" autocomplete="email">
-                        <input type="text" id="hero-city" name="city" required placeholder="Austin, TX">
-                    </div>
-                    <div class="hero-form-actions">
-                        <button type="submit" class="btn-primary" data-interaction="hero-signup-submit">
-                            Get Free Early Access
-                        </button>
-                        <button type="button" class="btn-founding" data-interaction="founding-cta-click" onclick="document.getElementById('founding-modal').classList.add('open')">
-                            ★ Become a Founding Rider — $19
-                        </button>
-                    </div>
-                    <p class="form-note">Free tier always free. No spam. Unsubscribe anytime.</p>
-                </form>
-
-                <div class="social-proof">
-                    <div class="proof-avatars">
-                        <div class="avatar av1"></div>
-                        <div class="avatar av2"></div>
-                        <div class="avatar av3"></div>
-                        <div class="avatar av4"></div>
-                    </div>
-                    <span class="proof-text">Joined by riders in <strong>31 states</strong> so far</span>
-                </div>
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                Route Intelligence for Motorcycle Riders
             </div>
 
-            <div class="hero-visual">
+            <h1 class="hero-title">
+                Know the risk.<br><em>Before you ride.</em>
+            </h1>
+
+            <p class="hero-description">
+                Motyric scores your routes using real crash data, weather patterns, and time-of-day risk — so you decide smarter before the engine starts.
+            </p>
+
+            <form id="hero-signup-form" class="hero-form" data-section="hero-signup" novalidate>
+                <input type="email" id="hero-email" name="email" required
+                    placeholder="your@email.com"
+                    autocomplete="email"
+                    inputmode="email">
+                <input type="text" id="hero-city" name="city" required
+                    placeholder="Your city or region"
+                    autocomplete="address-level2">
+                <button type="submit" class="btn-primary btn-hero" data-interaction="hero-signup-submit">
+                    Get Free Early Access
+                </button>
+                <button type="button" class="btn-founding-secondary" data-interaction="founding-hero-click"
+                    id="open-modal-hero">
+                    ★&nbsp;&nbsp;Founding Rider Access — $19 lifetime
+                </button>
+                <p class="form-note">Free tier always free · No spam · Unsubscribe anytime</p>
+            </form>
+
+            <div class="social-proof">
+                <div class="proof-avatars">
+                    <div class="avatar av1"></div>
+                    <div class="avatar av2"></div>
+                    <div class="avatar av3"></div>
+                    <div class="avatar av4"></div>
+                </div>
+                <span class="proof-text">Riders in <strong>31 states</strong> already signed up</span>
+            </div>
+
+            <!-- Route cards: scroll-hook proof element -->
+            <div class="hero-visual" aria-hidden="true">
                 <div class="route-card card-danger">
                     <div class="card-header">
                         <span class="card-label">I-35 North</span>
-                        <span class="score-badge danger">7.2</span>
+                        <span class="score-badge danger">Risk 7.2</span>
                     </div>
                     <div class="card-meta">18 min · 12.4 mi</div>
-                    <div class="risk-bar">
-                        <div class="risk-fill danger" style="width: 72%"></div>
-                    </div>
+                    <div class="risk-bar"><div class="risk-fill danger" style="width:72%"></div></div>
                     <div class="card-tags">
                         <span class="tag">High traffic</span>
                         <span class="tag">3 crash zones</span>
@@ -105,40 +101,31 @@
                 <div class="route-card card-safe">
                     <div class="card-header">
                         <span class="card-label">Loop 360</span>
-                        <span class="score-badge safe">3.1</span>
+                        <span class="score-badge safe">Risk 3.1</span>
                     </div>
                     <div class="card-meta">22 min · 14.1 mi</div>
-                    <div class="risk-bar">
-                        <div class="risk-fill safe" style="width: 31%"></div>
-                    </div>
+                    <div class="risk-bar"><div class="risk-fill safe" style="width:31%"></div></div>
                     <div class="card-tags">
                         <span class="tag recommended">✓ Recommended</span>
                         <span class="tag">Lower density</span>
                     </div>
                 </div>
             </div>
+
         </div>
-        <div class="scroll-hint">scroll to learn more ↓</div>
     </section>
 
-    <!-- ============================================================
-         CREDIBILITY STRIP
-    ============================================================ -->
+    <!-- CREDIBILITY STRIP -->
     <div class="credibility-strip" data-section="credibility">
         <div class="strip-inner">
-            <span><strong>47,000+</strong> miles of US highway analyzed</span>
-            <span class="sep">·</span>
-            <span><strong>Real crash data</strong> from state DOT records</span>
-            <span class="sep">·</span>
-            <span><strong>Weather-adjusted</strong> risk scoring</span>
-            <span class="sep">·</span>
-            <span><strong>Time-of-day</strong> risk windows</span>
+            <div class="strip-stat"><strong>47,000+</strong><span>miles analyzed</span></div>
+            <div class="strip-stat"><strong>Real</strong><span>DOT crash data</span></div>
+            <div class="strip-stat"><strong>Live</strong><span>weather scoring</span></div>
+            <div class="strip-stat"><strong>Hourly</strong><span>risk windows</span></div>
         </div>
     </div>
 
-    <!-- ============================================================
-         HOW IT WORKS
-    ============================================================ -->
+    <!-- HOW IT WORKS -->
     <section class="how" data-section="how-it-works">
         <div class="section-container">
             <div class="section-label">How it works</div>
@@ -151,7 +138,6 @@
                         <p>Input your start and destination — or drop a pin on a road you're considering.</p>
                     </div>
                 </div>
-                <div class="step-arrow">→</div>
                 <div class="step">
                     <div class="step-number">02</div>
                     <div class="step-content">
@@ -159,169 +145,170 @@
                         <p>Motyric runs crash history, weather conditions, and time-of-day risk through its scoring model.</p>
                     </div>
                 </div>
-                <div class="step-arrow">→</div>
                 <div class="step">
                     <div class="step-number">03</div>
                     <div class="step-content">
                         <h3>Choose smarter</h3>
-                        <p>Compare alternate routes by risk. See exactly which segments drive the score up — and why.</p>
+                        <p>Compare routes by risk. See exactly which segments drive the score up — and why.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ============================================================
-         FEATURES — tied to top survey responses
-    ============================================================ -->
+    <!-- FEATURES -->
     <section class="features" data-section="features">
         <div class="section-container">
             <div class="section-label">What Motyric tracks</div>
-            <h2 class="section-title">Every variable that actually matters on two wheels.</h2>
+            <h2 class="section-title">Every variable that matters on two wheels.</h2>
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">⛈</div>
+                    <span class="feature-icon">⛈</span>
                     <h3>Weather-adjusted risk</h3>
-                    <p>Rain, low visibility, and wet pavement change your risk profile. Motyric factors live weather into every score.</p>
-                    <div class="feature-tag">Most requested feature</div>
+                    <p>Rain, low visibility, and wet pavement change your risk profile. Live weather is factored into every score.</p>
+                    <div class="feature-tag">Most requested</div>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">⚠</div>
+                    <span class="feature-icon">⚠</span>
                     <h3>Dangerous intersection alerts</h3>
-                    <p>Flagged intersections with disproportionate motorcycle crash rates, sourced directly from DOT records.</p>
+                    <p>Flagged intersections with disproportionate crash rates, sourced directly from DOT records.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🗺</div>
+                    <span class="feature-icon">🗺</span>
                     <h3>Crash heatmaps</h3>
-                    <p>See where crashes cluster along your route — not just a score, but a map of where the risk actually lives.</p>
+                    <p>See where crashes cluster along your route — a map of where risk actually lives.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🕐</div>
+                    <span class="feature-icon">🕐</span>
                     <h3>Time-of-day risk windows</h3>
-                    <p>Evening rush, low-sun angles, late-night impaired drivers — your risk changes by the hour. Motyric shows you when.</p>
+                    <p>Evening rush, low-sun angles, late-night impaired drivers — risk changes by the hour.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🦌</div>
+                    <span class="feature-icon">🦌</span>
                     <h3>Wildlife hotspot alerts</h3>
-                    <p>Deer strike corridors and high-activity zones overlaid on your route — especially relevant at dawn and dusk.</p>
+                    <p>Deer strike corridors overlaid on your route — especially relevant at dawn and dusk.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">↔</div>
+                    <span class="feature-icon">↔</span>
                     <h3>Route comparison tool</h3>
-                    <p>Side-by-side risk comparison of your fastest route vs. your safest one. You decide what the tradeoff is worth.</p>
+                    <p>Fastest vs. safest — side by side. You decide what the tradeoff is worth.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ============================================================
-         FOUNDING MEMBER SECTION
-    ============================================================ -->
+    <!-- FOUNDING MEMBER -->
     <section class="founding" id="founding" data-section="founding-pitch">
         <div class="section-container">
-            <div class="founding-inner">
-                <div class="founding-text">
-                    <div class="section-label">Founding Rider Access</div>
-                    <h2 class="section-title">Lock in lifetime Pro access.<br>One payment. No subscription ever.</h2>
-                    <p class="founding-description">The first 100 riders who back Motyric get permanent Pro access — all features, all updates, forever — for a single one-time payment of $19. No monthly fees. No renewal. Ever.</p>
-                    <ul class="founding-perks">
-                        <li>✓ Lifetime Pro access — every feature, forever</li>
-                        <li>✓ Your feedback shapes what gets built first</li>
-                        <li>✓ Founding Rider badge on your profile</li>
-                        <li>✓ Direct line to the team during beta</li>
-                    </ul>
-                    <button class="btn-primary founding-btn" data-interaction="founding-section-cta" onclick="document.getElementById('founding-modal').classList.add('open')">
-                        Become a Founding Rider — $19
-                    </button>
-                    <p class="founding-note">Spots remaining: <strong id="spots-counter">94 of 100</strong> · Charged only when the product launches</p>
-                </div>
-                <div class="founding-visual">
-                    <div class="founding-card">
-                        <div class="founding-card-badge">FOUNDING RIDER</div>
-                        <div class="founding-card-title">Pro Access</div>
-                        <div class="founding-card-price">$19 <span>one-time</span></div>
-                        <div class="founding-card-divider"></div>
-                        <div class="founding-card-vs">vs. $5–8/mo subscription later</div>
-                        <div class="founding-card-saving">Save $40–80+ in year one</div>
-                    </div>
-                </div>
+            <div class="section-label">Founding Rider Access</div>
+            <h2 class="section-title">Lifetime Pro access.<br>One payment. No subscription ever.</h2>
+            <p class="founding-description">The first 100 riders who back Motyric get permanent Pro access — all features, all updates, forever — for a single $19 one-time payment.</p>
+
+            <div class="founding-card">
+                <div class="founding-card-badge">FOUNDING RIDER</div>
+                <div class="founding-card-price">$19 <span>one-time</span></div>
+                <div class="founding-card-vs">vs. $5–8/mo subscription later</div>
+                <div class="founding-card-saving">Save $40–80+ in year one</div>
             </div>
+
+            <ul class="founding-perks">
+                <li>✓&nbsp; Lifetime Pro access — every feature, forever</li>
+                <li>✓&nbsp; Your feedback shapes what gets built first</li>
+                <li>✓&nbsp; Founding Rider badge on your profile</li>
+                <li>✓&nbsp; Direct line to the team during beta</li>
+            </ul>
+
+            <button class="btn-primary btn-full" id="open-modal-founding"
+                data-interaction="founding-section-cta">
+                Become a Founding Rider — $19
+            </button>
+            <p class="founding-note">Spots remaining: <strong id="spots-counter">94 of 100</strong> · Charged only when we launch</p>
         </div>
     </section>
 
-    <!-- ============================================================
-         SECONDARY SIGNUP (bottom of page fallback)
-    ============================================================ -->
+    <!-- SECONDARY SIGNUP -->
     <section class="signup-secondary" id="signup" data-section="secondary-signup">
-        <div class="section-container narrow">
-            <h2 class="section-title">Get notified when Motyric launches in your area.</h2>
+        <div class="section-container">
+            <h2 class="section-title">Get notified when Motyric launches near you.</h2>
             <p class="section-description">Free early access. No credit card required.</p>
-            <form id="signup-form" class="signup-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="email">Email address</label>
-                        <input type="email" id="email" name="email" required placeholder="your@email.com" autocomplete="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="city">City or region</label>
-                        <input type="text" id="city" name="city" required placeholder="Austin, TX">
-                    </div>
+            <form id="signup-form" class="signup-form" novalidate>
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input type="email" id="email" name="email" required
+                        placeholder="your@email.com"
+                        autocomplete="email"
+                        inputmode="email">
                 </div>
-                <button type="submit" class="btn-primary full-width" data-interaction="secondary-signup-submit">Get Free Early Access</button>
+                <div class="form-group">
+                    <label for="city">City or region</label>
+                    <input type="text" id="city" name="city" required
+                        placeholder="Austin, TX"
+                        autocomplete="address-level2">
+                </div>
+                <button type="submit" class="btn-primary btn-full" data-interaction="secondary-signup-submit">
+                    Get Free Early Access
+                </button>
                 <p class="form-note centered">We'll only email you about Motyric. Unsubscribe anytime.</p>
             </form>
         </div>
     </section>
 
-    <!-- ============================================================
-         POST-SIGNUP SURVEY
-    ============================================================ -->
-    <section class="survey" id="post-signup-survey" style="display: none;" data-section="post-signup-survey">
-        <div class="section-container narrow">
+    <!-- POST-SIGNUP SURVEY -->
+    <section class="survey" id="post-signup-survey" style="display:none;" data-section="post-signup-survey">
+        <div class="section-container">
             <h2 class="section-title">One more thing — 30 seconds.</h2>
             <p class="section-description">Your answers directly shape what we build first.</p>
-            <form id="survey-form" class="survey-form">
+            <form id="survey-form" class="survey-form" novalidate>
                 <div class="form-group">
                     <label for="use-case">When would you realistically use Motyric?</label>
-                    <textarea id="use-case" name="use-case" rows="2" placeholder="Daily commute, long weekend rides, unfamiliar routes..."></textarea>
+                    <textarea id="use-case" name="use-case" rows="3"
+                        placeholder="Daily commute, long weekend rides, unfamiliar routes..."></textarea>
                 </div>
                 <div class="form-group">
                     <label for="signup-reason">What made you sign up?</label>
-                    <textarea id="signup-reason" name="signup-reason" rows="2" placeholder="I ride to work and want to know the safer option..."></textarea>
+                    <textarea id="signup-reason" name="signup-reason" rows="3"
+                        placeholder="I ride to work and want to know the safer option..."></textarea>
                 </div>
                 <div class="form-group">
                     <label for="dealbreaker">What would make this useless to you?</label>
-                    <textarea id="dealbreaker" name="dealbreaker" rows="2" placeholder="If it required a subscription, wasn't accurate..."></textarea>
+                    <textarea id="dealbreaker" name="dealbreaker" rows="3"
+                        placeholder="If it required a subscription, wasn't accurate..."></textarea>
                 </div>
-                <button type="submit" class="btn-primary full-width" data-interaction="survey-submit">Submit — I'm done</button>
+                <button type="submit" class="btn-primary btn-full" data-interaction="survey-submit">
+                    Submit — I'm done
+                </button>
             </form>
         </div>
     </section>
 
-    <!-- ============================================================
-         COMPLETION
-    ============================================================ -->
-    <section class="completion" id="completion-message" style="display: none;" data-section="completion">
-        <div class="section-container narrow centered-text">
+    <!-- COMPLETION -->
+    <section class="completion" id="completion-message" style="display:none;" data-section="completion">
+        <div class="section-container centered-text">
             <div class="completion-icon">✓</div>
             <h2 class="section-title">You're on the list.</h2>
-            <p class="section-description">We'll reach out as soon as Motyric launches in your area. In the meantime — ride safe.</p>
+            <p class="section-description">We'll reach out as soon as Motyric launches in your area. Ride safe.</p>
         </div>
     </section>
 
-    <!-- ============================================================
-         FOUNDING RIDER MODAL
-    ============================================================ -->
-    <div id="founding-modal" class="modal-overlay" data-section="founding-modal">
+    <!-- MODAL: bottom sheet on mobile, centered dialog on desktop -->
+    <div id="founding-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
         <div class="modal-box">
-            <button class="modal-close" onclick="document.getElementById('founding-modal').classList.remove('open')" aria-label="Close">✕</button>
+            <div class="modal-handle" aria-hidden="true"></div>
+            <button class="modal-close" id="modal-close-btn" aria-label="Close modal">✕</button>
             <div class="modal-badge">Founding Rider</div>
-            <h3 class="modal-title">Lifetime Pro Access — $19</h3>
-            <p class="modal-desc">You'll be charged only when Motyric launches. If we don't ship, you don't pay. Simple.</p>
-            <form id="founding-form" class="modal-form">
-                <input type="email" id="founding-email" name="email" required placeholder="your@email.com" autocomplete="email">
-                <input type="text" id="founding-city" name="city" required placeholder="City or region">
-                <button type="submit" class="btn-primary full-width" data-interaction="founding-form-submit">Reserve My Spot — $19</button>
+            <h3 class="modal-title" id="modal-heading">Lifetime Pro Access — $19</h3>
+            <p class="modal-desc">You'll be charged only when Motyric launches. If we don't ship, you don't pay.</p>
+            <form id="founding-form" class="modal-form" novalidate>
+                <input type="email" id="founding-email" name="email" required
+                    placeholder="your@email.com"
+                    autocomplete="email"
+                    inputmode="email">
+                <input type="text" id="founding-city" name="city" required
+                    placeholder="City or region"
+                    autocomplete="address-level2">
+                <button type="submit" class="btn-primary btn-full" data-interaction="founding-form-submit">
+                    Reserve My Spot — $19
+                </button>
             </form>
             <p class="modal-note">First 100 riders only · <span id="modal-spots">94 spots</span> remaining</p>
         </div>
