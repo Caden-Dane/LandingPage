@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RideSafe - Motorcycle Route Safety Analytics</title>
-    <meta name="description" content="Data-driven motorcycle route safety analysis. Know the risks before you ride.">
+    <title>Motyric — Ride Smarter</title>
+    <meta name="description" content="Route intelligence for motorcycle riders. Know the risk before you twist the throttle.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    
-    <!-- Google Analytics 4 -->
+
+    <!-- Google Analytics 4 — preserved from original -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QD0MNDVYHP"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -15,257 +18,323 @@
         gtag('js', new Date());
         gtag('config', 'G-QD0MNDVYHP');
     </script>
-    
-    <!-- Hotjar Tracking Code -->
-    <!-- STEP 2: Replace XXXXXXX below with your actual Hotjar Site ID -->
-    <!-- <script>
-        (function(h,o,t,j,a,r){
-            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-            h._hjSettings={hjid:XXXXXXX,hjsv:6}; // Replace XXXXXXX with your Hotjar Site ID
-            a=o.getElementsByTagName('head')[0];
-            r=o.createElement('script');r.async=1;
-            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-            a.appendChild(r);
-        })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-    </script> -->
 </head>
 <body>
+
+    <!-- ============================================================
+         NAV
+    ============================================================ -->
     <nav id="navbar">
         <div class="nav-container">
             <a href="#home" class="logo-link">
-                <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#fff;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#ff3366;stop-opacity:1" />
-                        </linearGradient>
-                    </defs>
-                    <polygon points="50,10 20,50 50,90 80,50" fill="none" stroke="url(#logoGrad)" stroke-width="3"/>
-                    <circle cx="50" cy="50" r="5" fill="url(#logoGrad)"/>
+                <svg class="logo-mark" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="22" cy="22" r="20" stroke="#f59e0b" stroke-width="2.5"/>
+                    <path d="M 10 28 Q 16 14 22 22 Q 28 30 34 16" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" fill="none"/>
+                    <circle cx="22" cy="22" r="3" fill="#f59e0b"/>
                 </svg>
-                <span class="logo-text">RideSafe</span>
+                <span class="logo-text">Motyric</span>
             </a>
+            <a href="#signup" class="nav-cta">Get Early Access</a>
         </div>
     </nav>
 
-    <section class="hero" id="home" data-section="problem-framing">
-        <div class="hero-bg"></div>
+    <!-- ============================================================
+         HERO — CTA visible above the fold
+    ============================================================ -->
+    <section class="hero" id="home" data-section="hero">
+        <div class="hero-grain"></div>
+        <div class="hero-glow"></div>
         <div class="hero-container">
-            <div class="hero-left">
-                <div class="hero-badge">Data-Driven Risk Assessment</div>
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="badge-dot"></span>
+                    Route Intelligence for Motorcycle Riders
+                </div>
                 <h1 class="hero-title">
-                    <span class="line"><span>Safer motorcycle</span></span>
-                    <span class="line"><span>routes powered by</span></span>
-                    <span class="line"><span>raw <span class="accent">data</span></span></span>
+                    Know the risk.<br>
+                    <em>Before you ride.</em>
                 </h1>
                 <p class="hero-description">
-                    Evening commutes. Unfamiliar routes. Wet pavement. Each decision compounds risk. RideSafe analyzes crash data, road conditions, and traffic patterns across 47,000 miles of US highways.
+                    Motyric scores your routes using real motorcycle crash data, weather patterns, and time-of-day risk — so you make smarter decisions before the engine starts.
                 </p>
+
+                <!-- INLINE SIGNUP FORM — CTA above the fold -->
+                <form id="hero-signup-form" class="hero-form" data-section="hero-signup">
+                    <div class="hero-form-fields">
+                        <input type="email" id="hero-email" name="email" required placeholder="your@email.com" autocomplete="email">
+                        <input type="text" id="hero-city" name="city" required placeholder="Austin, TX">
+                    </div>
+                    <div class="hero-form-actions">
+                        <button type="submit" class="btn-primary" data-interaction="hero-signup-submit">
+                            Get Free Early Access
+                        </button>
+                        <button type="button" class="btn-founding" data-interaction="founding-cta-click" onclick="document.getElementById('founding-modal').classList.add('open')">
+                            ★ Become a Founding Rider — $19
+                        </button>
+                    </div>
+                    <p class="form-note">Free tier always free. No spam. Unsubscribe anytime.</p>
+                </form>
+
+                <div class="social-proof">
+                    <div class="proof-avatars">
+                        <div class="avatar av1"></div>
+                        <div class="avatar av2"></div>
+                        <div class="avatar av3"></div>
+                        <div class="avatar av4"></div>
+                    </div>
+                    <span class="proof-text">Joined by riders in <strong>31 states</strong> so far</span>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="route-card card-danger">
+                    <div class="card-header">
+                        <span class="card-label">I-35 North</span>
+                        <span class="score-badge danger">7.2</span>
+                    </div>
+                    <div class="card-meta">18 min · 12.4 mi</div>
+                    <div class="risk-bar">
+                        <div class="risk-fill danger" style="width: 72%"></div>
+                    </div>
+                    <div class="card-tags">
+                        <span class="tag">High traffic</span>
+                        <span class="tag">3 crash zones</span>
+                    </div>
+                </div>
+                <div class="vs-divider">VS</div>
+                <div class="route-card card-safe">
+                    <div class="card-header">
+                        <span class="card-label">Loop 360</span>
+                        <span class="score-badge safe">3.1</span>
+                    </div>
+                    <div class="card-meta">22 min · 14.1 mi</div>
+                    <div class="risk-bar">
+                        <div class="risk-fill safe" style="width: 31%"></div>
+                    </div>
+                    <div class="card-tags">
+                        <span class="tag recommended">✓ Recommended</span>
+                        <span class="tag">Lower density</span>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="scroll-indicator">
-            <span></span>
-        </div>
+        <div class="scroll-hint">scroll to learn more ↓</div>
     </section>
 
-    <section class="value-prop" data-section="value-proposition">
+    <!-- ============================================================
+         CREDIBILITY STRIP
+    ============================================================ -->
+    <div class="credibility-strip" data-section="credibility">
+        <div class="strip-inner">
+            <span><strong>47,000+</strong> miles of US highway analyzed</span>
+            <span class="sep">·</span>
+            <span><strong>Real crash data</strong> from state DOT records</span>
+            <span class="sep">·</span>
+            <span><strong>Weather-adjusted</strong> risk scoring</span>
+            <span class="sep">·</span>
+            <span><strong>Time-of-day</strong> risk windows</span>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         HOW IT WORKS
+    ============================================================ -->
+    <section class="how" data-section="how-it-works">
         <div class="section-container">
-            <h2 class="section-title">Make smarter route decisions before the engine starts</h2>
-            <p class="section-description">RideSafe assigns safety scores to motorcycle routes using real crash data and live conditions, helping you choose lower-risk roads for your rides with confidence.</p>
-        </div>
-    </section>
-
-    <section class="demo" data-section="core-interaction">
-        <div class="demo-container">
-            <h3 class="demo-title">How it works</h3>
-            <div class="demo-interface">
-                <div class="demo-input-group">
-                    <label for="demo-start">Starting point</label>
-                    <input type="text" id="demo-start" placeholder="Downtown Austin, TX" readonly>
+            <div class="section-label">How it works</div>
+            <h2 class="section-title">Your route. Scored before you leave.</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>Enter your route</h3>
+                        <p>Input your start and destination — or drop a pin on a road you're considering.</p>
+                    </div>
                 </div>
-                <div class="demo-input-group">
-                    <label for="demo-end">Destination</label>
-                    <input type="text" id="demo-end" placeholder="Austin-Bergstrom Airport" readonly>
+                <div class="step-arrow">→</div>
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>Get your Safety Score</h3>
+                        <p>Motyric runs crash history, weather conditions, and time-of-day risk through its scoring model.</p>
+                    </div>
                 </div>
-                <button class="demo-button" data-interaction="route-analyze">Analyze Route</button>
-                
-                <div class="map-visualization">
-                    <svg class="route-map" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Background -->
-                        <rect width="800" height="500" fill="#0a0a0a"/>
-                        
-                        <!-- Grid lines for map effect -->
-                        <g class="grid-lines" opacity="0.1">
-                            <line x1="0" y1="100" x2="800" y2="100" stroke="#fff" stroke-width="1"/>
-                            <line x1="0" y1="200" x2="800" y2="200" stroke="#fff" stroke-width="1"/>
-                            <line x1="0" y1="300" x2="800" y2="300" stroke="#fff" stroke-width="1"/>
-                            <line x1="0" y1="400" x2="800" y2="400" stroke="#fff" stroke-width="1"/>
-                            <line x1="200" y1="0" x2="200" y2="500" stroke="#fff" stroke-width="1"/>
-                            <line x1="400" y1="0" x2="400" y2="500" stroke="#fff" stroke-width="1"/>
-                            <line x1="600" y1="0" x2="600" y2="500" stroke="#fff" stroke-width="1"/>
-                        </g>
-                        
-                        <!-- Road network background -->
-                        <g class="road-network" opacity="0.3">
-                            <path d="M 100 150 Q 200 140 300 160 T 500 170 L 700 180" stroke="#444" stroke-width="3" fill="none"/>
-                            <path d="M 150 100 L 150 400" stroke="#444" stroke-width="3" fill="none"/>
-                            <path d="M 350 80 L 350 450" stroke="#444" stroke-width="3" fill="none"/>
-                            <path d="M 550 120 L 550 480" stroke="#444" stroke-width="3" fill="none"/>
-                            <path d="M 100 280 Q 300 260 500 290 T 700 310" stroke="#444" stroke-width="3" fill="none"/>
-                        </g>
-                        
-                        <!-- Route 1 (High Risk) - Faded -->
-                        <g class="route-1" opacity="0.4">
-                            <path class="route-path" 
-                                  d="M 120 200 L 180 190 L 240 210 L 300 200 L 360 220 L 420 210 L 480 230 L 540 220 L 600 240 L 660 235 L 720 245" 
-                                  stroke="#ef4444" 
-                                  stroke-width="6" 
-                                  fill="none"
-                                  stroke-linecap="round"
-                                  stroke-dasharray="12 6"/>
-                            <!-- Risk markers -->
-                            <circle cx="240" cy="210" r="8" fill="#ef4444" opacity="0.8">
-                                <animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite"/>
-                            </circle>
-                            <circle cx="420" cy="210" r="8" fill="#ef4444" opacity="0.8">
-                                <animate attributeName="r" values="8;12;8" dur="2s" begin="0.5s" repeatCount="indefinite"/>
-                            </circle>
-                            <circle cx="600" cy="240" r="8" fill="#ef4444" opacity="0.8">
-                                <animate attributeName="r" values="8;12;8" dur="2s" begin="1s" repeatCount="indefinite"/>
-                            </circle>
-                        </g>
-                        
-                        <!-- Route 2 (Low Risk) - Highlighted -->
-                        <g class="route-2">
-                            <path class="route-path active-route" 
-                                  d="M 120 200 L 140 260 L 180 280 L 240 290 L 300 280 L 380 295 L 460 285 L 540 300 L 620 290 L 680 305 L 720 300" 
-                                  stroke="#10b981" 
-                                  stroke-width="8" 
-                                  fill="none"
-                                  stroke-linecap="round">
-                                <animate attributeName="stroke-width" values="8;10;8" dur="3s" repeatCount="indefinite"/>
-                            </path>
-                            <!-- Safe route glow effect -->
-                            <path d="M 120 200 L 140 260 L 180 280 L 240 290 L 300 280 L 380 295 L 460 285 L 540 300 L 620 290 L 680 305 L 720 300" 
-                                  stroke="#10b981" 
-                                  stroke-width="16" 
-                                  fill="none"
-                                  opacity="0.3"
-                                  stroke-linecap="round">
-                                <animate attributeName="opacity" values="0.3;0.5;0.3" dur="3s" repeatCount="indefinite"/>
-                            </path>
-                        </g>
-                        
-                        <!-- Start Point Marker -->
-                        <g class="start-marker">
-                            <circle cx="120" cy="200" r="12" fill="#ff3366" stroke="#fff" stroke-width="2"/>
-                            <text x="120" y="185" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">START</text>
-                        </g>
-                        
-                        <!-- End Point Marker -->
-                        <g class="end-marker">
-                            <circle cx="720" cy="300" r="12" fill="#ff3366" stroke="#fff" stroke-width="2"/>
-                            <path d="M 720 292 L 720 308 M 712 300 L 728 300" stroke="#fff" stroke-width="2"/>
-                            <text x="720" y="325" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">DESTINATION</text>
-                        </g>
-                        
-                        <!-- Route Info Cards -->
-                        <!-- Route 1 Info (High Risk) -->
-                        <g class="route-info-1" opacity="0.6">
-                            <rect x="30" y="30" width="180" height="85" rx="6" fill="#1a1a1a" stroke="#ef4444" stroke-width="2"/>
-                            <text x="120" y="52" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">Route 1: I-35</text>
-                            <rect x="75" y="60" width="90" height="22" rx="11" fill="rgba(239, 68, 68, 0.2)" stroke="#ef4444" stroke-width="1"/>
-                            <text x="120" y="75" text-anchor="middle" fill="#fca5a5" font-size="12" font-weight="700">Risk: 7.2</text>
-                            <text x="40" y="95" fill="#999" font-size="11">18 min · 12.4 mi</text>
-                            <text x="40" y="108" fill="#999" font-size="10">High traffic density</text>
-                        </g>
-                        
-                        <!-- Route 2 Info (Low Risk) - Highlighted -->
-                        <g class="route-info-2">
-                            <rect x="30" y="360" width="200" height="100" rx="6" fill="#1a1a1a" stroke="#10b981" stroke-width="3">
-                                <animate attributeName="stroke-width" values="3;4;3" dur="3s" repeatCount="indefinite"/>
-                            </rect>
-                            <text x="130" y="382" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">Route 2: Loop 360</text>
-                            <rect x="75" y="390" width="110" height="22" rx="11" fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" stroke-width="1"/>
-                            <text x="130" y="405" text-anchor="middle" fill="#6ee7b7" font-size="12" font-weight="700">Risk: 3.1</text>
-                            <text x="40" y="425" fill="#999" font-size="11">22 min · 14.1 mi</text>
-                            <text x="40" y="438" fill="#10b981" font-size="10" font-weight="600">✓ RECOMMENDED</text>
-                            <text x="40" y="452" fill="#999" font-size="10">Better road conditions</text>
-                        </g>
-                        
-                        <!-- Legend -->
-                        <g class="legend">
-                            <text x="600" y="30" fill="#999" font-size="10" font-weight="600">RISK INDICATORS</text>
-                            <circle cx="615" cy="45" r="5" fill="#ef4444"/>
-                            <text x="625" y="49" fill="#999" font-size="9">High-risk zones</text>
-                            <line x1="600" y1="60" x2="640" y2="60" stroke="#10b981" stroke-width="3"/>
-                            <text x="645" y="64" fill="#999" font-size="9">Safe route</text>
-                        </g>
-                    </svg>
+                <div class="step-arrow">→</div>
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>Choose smarter</h3>
+                        <p>Compare alternate routes by risk. See exactly which segments drive the score up — and why.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="signup" id="signup" data-section="signup">
-        <div class="signup-container">
-            <h2 class="section-title">Get early access when RideSafe launches in your area</h2>
+    <!-- ============================================================
+         FEATURES — tied to top survey responses
+    ============================================================ -->
+    <section class="features" data-section="features">
+        <div class="section-container">
+            <div class="section-label">What Motyric tracks</div>
+            <h2 class="section-title">Every variable that actually matters on two wheels.</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⛈</div>
+                    <h3>Weather-adjusted risk</h3>
+                    <p>Rain, low visibility, and wet pavement change your risk profile. Motyric factors live weather into every score.</p>
+                    <div class="feature-tag">Most requested feature</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚠</div>
+                    <h3>Dangerous intersection alerts</h3>
+                    <p>Flagged intersections with disproportionate motorcycle crash rates, sourced directly from DOT records.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🗺</div>
+                    <h3>Crash heatmaps</h3>
+                    <p>See where crashes cluster along your route — not just a score, but a map of where the risk actually lives.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🕐</div>
+                    <h3>Time-of-day risk windows</h3>
+                    <p>Evening rush, low-sun angles, late-night impaired drivers — your risk changes by the hour. Motyric shows you when.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🦌</div>
+                    <h3>Wildlife hotspot alerts</h3>
+                    <p>Deer strike corridors and high-activity zones overlaid on your route — especially relevant at dawn and dusk.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">↔</div>
+                    <h3>Route comparison tool</h3>
+                    <p>Side-by-side risk comparison of your fastest route vs. your safest one. You decide what the tradeoff is worth.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         FOUNDING MEMBER SECTION
+    ============================================================ -->
+    <section class="founding" id="founding" data-section="founding-pitch">
+        <div class="section-container">
+            <div class="founding-inner">
+                <div class="founding-text">
+                    <div class="section-label">Founding Rider Access</div>
+                    <h2 class="section-title">Lock in lifetime Pro access.<br>One payment. No subscription ever.</h2>
+                    <p class="founding-description">The first 100 riders who back Motyric get permanent Pro access — all features, all updates, forever — for a single one-time payment of $19. No monthly fees. No renewal. Ever.</p>
+                    <ul class="founding-perks">
+                        <li>✓ Lifetime Pro access — every feature, forever</li>
+                        <li>✓ Your feedback shapes what gets built first</li>
+                        <li>✓ Founding Rider badge on your profile</li>
+                        <li>✓ Direct line to the team during beta</li>
+                    </ul>
+                    <button class="btn-primary founding-btn" data-interaction="founding-section-cta" onclick="document.getElementById('founding-modal').classList.add('open')">
+                        Become a Founding Rider — $19
+                    </button>
+                    <p class="founding-note">Spots remaining: <strong id="spots-counter">94 of 100</strong> · Charged only when the product launches</p>
+                </div>
+                <div class="founding-visual">
+                    <div class="founding-card">
+                        <div class="founding-card-badge">FOUNDING RIDER</div>
+                        <div class="founding-card-title">Pro Access</div>
+                        <div class="founding-card-price">$19 <span>one-time</span></div>
+                        <div class="founding-card-divider"></div>
+                        <div class="founding-card-vs">vs. $5–8/mo subscription later</div>
+                        <div class="founding-card-saving">Save $40–80+ in year one</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECONDARY SIGNUP (bottom of page fallback)
+    ============================================================ -->
+    <section class="signup-secondary" id="signup" data-section="secondary-signup">
+        <div class="section-container narrow">
+            <h2 class="section-title">Get notified when Motyric launches in your area.</h2>
+            <p class="section-description">Free early access. No credit card required.</p>
             <form id="signup-form" class="signup-form">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="email">Email address</label>
-                        <input type="email" id="email" name="email" required placeholder="your@email.com">
+                        <input type="email" id="email" name="email" required placeholder="your@email.com" autocomplete="email">
                     </div>
                     <div class="form-group">
                         <label for="city">City or region</label>
                         <input type="text" id="city" name="city" required placeholder="Austin, TX">
                     </div>
                 </div>
-                <button type="submit" class="cta-button" data-interaction="signup-submit">Get Early Access</button>
-                <p class="privacy-note">
-                  Early access is limited. We’ll notify you as soon as RideSafe launches.
-                </p>
-                <p class="privacy-note">We will only use your email to notify you about RideSafe. No spam. Unsubscribe anytime.</p>
+                <button type="submit" class="btn-primary full-width" data-interaction="secondary-signup-submit">Get Free Early Access</button>
+                <p class="form-note centered">We'll only email you about Motyric. Unsubscribe anytime.</p>
             </form>
         </div>
     </section>
 
+    <!-- ============================================================
+         POST-SIGNUP SURVEY
+    ============================================================ -->
     <section class="survey" id="post-signup-survey" style="display: none;" data-section="post-signup-survey">
-        <div class="survey-container">
-            <h2 class="section-title">Thank you for signing up</h2>
-            <p class="survey-subtitle">Help us build something useful. This takes 30 seconds.</p>
+        <div class="section-container narrow">
+            <h2 class="section-title">One more thing — 30 seconds.</h2>
+            <p class="section-description">Your answers directly shape what we build first.</p>
             <form id="survey-form" class="survey-form">
                 <div class="form-group">
+                    <label for="use-case">When would you realistically use Motyric?</label>
+                    <textarea id="use-case" name="use-case" rows="2" placeholder="Daily commute, long weekend rides, unfamiliar routes..."></textarea>
+                </div>
+                <div class="form-group">
                     <label for="signup-reason">What made you sign up?</label>
-                    <textarea id="signup-reason" name="signup-reason" rows="3" placeholder="I ride to work daily and..."></textarea>
+                    <textarea id="signup-reason" name="signup-reason" rows="2" placeholder="I ride to work and want to know the safer option..."></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="use-case">When would you use something like this?</label>
-                    <textarea id="use-case" name="use-case" rows="3" placeholder="Before weekend rides, unfamiliar routes..."></textarea>
+                    <label for="dealbreaker">What would make this useless to you?</label>
+                    <textarea id="dealbreaker" name="dealbreaker" rows="2" placeholder="If it required a subscription, wasn't accurate..."></textarea>
                 </div>
-                <div class="form-group">
-                    <label for="dealbreaker">What would make this useless for you?</label>
-                    <textarea id="dealbreaker" name="dealbreaker" rows="3" placeholder="If it required subscription, wasn't accurate..."></textarea>
-                </div>
-                <button type="submit" class="survey-button" data-interaction="survey-submit">Submit feedback</button>
+                <button type="submit" class="btn-primary full-width" data-interaction="survey-submit">Submit — I'm done</button>
             </form>
         </div>
     </section>
 
+    <!-- ============================================================
+         COMPLETION
+    ============================================================ -->
     <section class="completion" id="completion-message" style="display: none;" data-section="completion">
-        <div class="completion-container">
-            <h2 class="section-title">Feedback received</h2>
-            <p class="completion-text">We will keep you updated on progress.</p>
+        <div class="section-container narrow centered-text">
+            <div class="completion-icon">✓</div>
+            <h2 class="section-title">You're on the list.</h2>
+            <p class="section-description">We'll reach out as soon as Motyric launches in your area. In the meantime — ride safe.</p>
         </div>
     </section>
+
+    <!-- ============================================================
+         FOUNDING RIDER MODAL
+    ============================================================ -->
+    <div id="founding-modal" class="modal-overlay" data-section="founding-modal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="document.getElementById('founding-modal').classList.remove('open')" aria-label="Close">✕</button>
+            <div class="modal-badge">Founding Rider</div>
+            <h3 class="modal-title">Lifetime Pro Access — $19</h3>
+            <p class="modal-desc">You'll be charged only when Motyric launches. If we don't ship, you don't pay. Simple.</p>
+            <form id="founding-form" class="modal-form">
+                <input type="email" id="founding-email" name="email" required placeholder="your@email.com" autocomplete="email">
+                <input type="text" id="founding-city" name="city" required placeholder="City or region">
+                <button type="submit" class="btn-primary full-width" data-interaction="founding-form-submit">Reserve My Spot — $19</button>
+            </form>
+            <p class="modal-note">First 100 riders only · <span id="modal-spots">94 spots</span> remaining</p>
+        </div>
+    </div>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 RideSafe. Validation in progress.</p>
+            <span class="footer-logo">Motyric</span>
+            <p>© 2025 Motyric. Validation in progress. Ride smarter.</p>
         </div>
     </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
 </body>
 </html>
